@@ -1,7 +1,9 @@
-// package com.tests.stonegame;
+package com.tests.stonegame;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Random;
-import java.util.Scanner;
 
 public class StoneGame {
     private static int playerScores = 0;
@@ -10,22 +12,31 @@ public class StoneGame {
     private static String[] playerSkills = {"石头", "剪子", "布"};
 
     public static void main(String[] args) {
-        System.out.println("输入:石头[1] 剪子[2] 布[3] 退出[4]");
-        while (playing) {
-            Scanner playerScanner = new Scanner(System.in);
-            int playerSkill = playerScanner.nextInt();
-            Random random = new Random();
-            int computerSkill = random.nextInt(3) + 1;
-            if (playerSkill == 4) {
-                System.out.println("Bye.");
-                playing = false;
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            System.out.println("输入:石头[1] 剪子[2] 布[3] 退出[4]");
+            while (playing) {
+                int playerSkill = Integer.parseInt(bufferedReader.readLine());
+                Random random = new Random();
+                int computerSkill = random.nextInt(3) + 1;
+                if (playerSkill == 4) {
+                    System.out.println("Bye.");
+                    playing = false;
+                    break;
+                }
+                if (playerSkill > 0 && playerSkill < 4) {
+                    System.out.println("玩家: " + playerSkills[playerSkill - 1]);
+                    System.out.println("电脑: " + playerSkills[computerSkill - 1]);
+                    compare(playerSkill, computerSkill);
+                    System.out.println("玩家分数: " + playerScores + " " + "电脑分数: " + computerScores);
+                } else {
+                    System.out.println("请重试.");
+                }
             }
-            if (playerSkill > 0 && playerSkill < 4) {
-                System.out.println("玩家: " + playerSkills[playerSkill - 1]);
-                System.out.println("电脑: " + playerSkills[computerSkill - 1]);
-                compare(playerSkill, computerSkill);
-                System.out.println("玩家分数: " + playerScores + " " + "电脑分数: " + computerScores);
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            System.out.println("请输入正确的数字!");
         }
     }
 
